@@ -59,21 +59,6 @@ void loop() {
   Serial.println(req);
   client.flush();
 
-  // Match the request
-  int val;
-  if (req.indexOf("/gpio/0") != -1)
-    val = 0;
-  else if (req.indexOf("/gpio/1") != -1)
-    val = 1;
-  else {
-    Serial.println("invalid request");
-    client.stop();
-    return;
-  }
-
-  // Set GPIO2 according to the request
-  digitalWrite(2, val);
-
   client.flush();
 
   // Prepare the response
