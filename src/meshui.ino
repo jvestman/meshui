@@ -1,72 +1,97 @@
+/*
+ *  This sketch demonstrates how to set up a simple HTTP-like server.
+ *  The server will set a GPIO pin depending on the request
+ *    http://server_ip/gpio/0 will set the GPIO2 low,
+ *    http://server_ip/gpio/1 will set the GPIO2 high
+ *  server_ip is the IP address of the ESP8266 module, will be
+ *  printed to Serial when the module is connected.
+ */
+
 #include <ESP8266WiFi.h>
-#include <WiFiClient.h>
-#include <ESP8266WebServer.h>
-#include <ESP8266mDNS.h>
 
-const char* ssid = "........";
-const char* password = "........";
+const char* ssid = "meshui";
+const char* password = "meshui";
 
-ESP8266WebServer server(80);
+// Create an instance of the server
+// specify the port to listen on as an argument
+WiFiServer server(80);
 
-const int led = 13;
-
-void handleRoot() {
-  digitalWrite(led, 1);
-  server.send(200, "text/plain", "hello from esp8266!");
-  digitalWrite(led, 0);
-}
-
-void handleNotFound(){
-  digitalWrite(led, 1);
-  String message = "File Not Found\n\n";
-  message += "URI: ";
-  message += server.uri();
-  message += "\nMethod: ";
-  message += (server.method() == HTTP_GET)?"GET":"POST";
-  message += "\nArguments: ";
-  message += server.args();
-  message += "\n";
-  for (uint8_t i=0; i<server.args(); i++){
-    message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
-  }
-  server.send(404, "text/plain", message);
-  digitalWrite(led, 0);
-}
-
-void setup(void){
-  pinMode(led, OUTPUT);
-  digitalWrite(led, 0);
+void setup() {
   Serial.begin(115200);
-  WiFi.begin(ssid, password);
-  Serial.println("");
+  delay(10);
 
-  // Wait for connection
+  // prepare GPIO2
+  pinMode(2, OUTPUT);
+  digitalWrite(2, 0);
+
+  // Connect to WiFi network
+  Serial.println();
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+
+  WiFi.begin(ssid, password);
+
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
   Serial.println("");
-  Serial.print("Connected to ");
-  Serial.println(ssid);
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
+  Serial.println("WiFi connected");
 
-  if (MDNS.begin("esp8266")) {
-    Serial.println("MDNS responder started");
-  }
-
-  server.on("/", handleRoot);
-
-  server.on("/inline", [](){
-    server.send(200, "text/plain", "this works as well");
-  });
-
-  server.onNotFound(handleNotFound);
-
+  // Start the server
   server.begin();
-  Serial.println("HTTP server started");
+  Serial.println("Server started");
+
+  // Print the IP address
+  Serial.println(WiFi.localIP());
 }
 
-void loop(void){
-  server.handleClient();
+void loop() {
+  // Check if a client has connected
+  WiFiClient client = server.available();
+  if (!client) {
+    return;
+  }
+
+  // Wait until the client sends some data
+  Serial.println("new client");
+  while(!client.available()){
+    delay(1);
+  }
+
+  // Read the first line of the request
+  String req = client.readStringUntil('\r');
+  Serial.println(req);
+  client.flush();
+
+  // Match the request
+  int val;
+  if (req.indexOf("/gpio/0") != -1)
+    val = 0;
+  else if (req.indexOf("/gpio/1") != -1)
+    val = 1;
+  else {
+    Serial.println("invalid request");
+    client.stop();
+    return;
+  }
+
+  // Set GPIO2 according to the request
+  digitalWrite(2, val);
+
+  client.flush();
+
+  // Prepare the response
+  String s = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE HTML>\r\n<html>\r\nGPIO is now ";
+  s += (val)?"high":"low";
+  s += "</html>\n";
+
+  // Send the response to the client
+  client.print(s);
+  delay(1);
+  Serial.println("Client disonnected");
+
+  // The client will actually be disconnected
+  // when the function returns and 'client' object is detroyed
 }
