@@ -31,7 +31,7 @@ void setup() {
   Serial.println(ssid);
 
   WiFi.mode(WIFI_AP);
-  WiFI.softAP(ssid, password);
+  WiFi.softAP(ssid, password);
   //WiFi.begin(ssid, password);
 
   server.begin();
