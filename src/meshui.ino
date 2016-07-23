@@ -41,8 +41,8 @@ void setup() {
   WiFi.softAP(ssid, password);
 
   server.on("/", handleRoot);
-  server.on("/index.css", handleRoot);
-  server.on("index.css", handleRoot);
+  server.on("/index.css", sendCss);
+  server.on("index.css", sendCss);
   server.onNotFound(handleNotFound);
   server.begin();
   Serial.println("Server started");
