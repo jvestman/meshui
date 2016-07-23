@@ -24,6 +24,10 @@ void handleRoot() {
   server.send(200, "text/html", index_html);
 }
 
+void sendCss() {
+  server.send(200, "text/css", index_css);
+}
+
 void handleNotFound(){
   server.send(404, "text/plain", "");
 }
@@ -37,6 +41,7 @@ void setup() {
   WiFi.softAP(ssid, password);
 
   server.on("/", handleRoot);
+  server.on("/index.css", sendCss);
   server.onNotFound(handleNotFound);
   server.begin();
   Serial.println("Server started");
