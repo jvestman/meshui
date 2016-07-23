@@ -38,7 +38,7 @@ void sendCss() {
 }
 
 void sendZepto() {
-  server.send(200, "text/css", zepto_js);
+  server.send(200, "application/javascript", zepto_js);
 }
 
 void handleNotFound(){
