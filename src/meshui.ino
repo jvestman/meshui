@@ -8,68 +8,36 @@
  */
 
 #include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
 
 const char* ssid = "meshui12345";
 const char* password = "meshui12345";
 
 // Create an instance of the server
 // specify the port to listen on as an argument
-WiFiServer server(80);
+
+ESP8266WebServer server(80);
+
+void handleRoot() {
+  server.send(200, "text/plain", "hello from esp8266!");
+}
 
 void setup() {
   Serial.begin(115200);
   delay(10);
 
-  // prepare GPIO2
-  pinMode(2, OUTPUT);
-  digitalWrite(2, 0);
-
-  // Connect to WiFi network
-  Serial.println();
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
 
   WiFi.mode(WIFI_AP);
   WiFi.softAP(ssid, password);
-  //WiFi.begin(ssid, password);
 
+  server.on("/", handleRoot);
   server.begin();
   Serial.println("Server started");
 
   // Print the IP address
   Serial.println(WiFi.localIP());
+
 }
 
 void loop() {
-  // Check if a client has connected
-  WiFiClient client = server.available();
-  if (!client) {
-    return;
-  }
-
-  // Wait until the client sends some data
-  Serial.println("new client");
-  while(!client.available()){
-    delay(1);
-  }
-
-  // Read the first line of the request
-  String req = client.readStringUntil('\r');
-  Serial.println(req);
-  client.flush();
-
-  client.flush();
-
-  // Prepare the response
-  String s = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE HTML>\r\n<html>\r\nGPIO is now ";
-  s += "</html>\n";
-
-  // Send the response to the client
-  client.print(s);
-  delay(1);
-  Serial.println("Client disonnected");
-
-  // The client will actually be disconnected
-  // when the function returns and 'client' object is detroyed
 }
