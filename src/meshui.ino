@@ -13,7 +13,6 @@
 #include <DallasTemperature.h>
 #include "index.html.h"
 #include "index.css.h"
-#include "zepto.js.h"
 
 
 const char* ssid = "meshui12345";
