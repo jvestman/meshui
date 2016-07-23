@@ -13,6 +13,7 @@
 #include <DallasTemperature.h>
 #include "index.html.h"
 #include "index.css.h"
+#include "zepto.js.h"
 
 
 const char* ssid = "meshui12345";
@@ -34,6 +35,10 @@ void handleRoot() {
 
 void sendCss() {
   server.send(200, "text/css", index_css);
+}
+
+void sendZepto() {
+  server.send(200, "text/css", zepto_js);
 }
 
 void handleNotFound(){
@@ -58,6 +63,7 @@ void setup() {
   server.on("/index.css", sendCss);
   server.on("index.css", sendCss);
   server.on("/temp", handleGetTemp);
+  server.on("/zepto.js", sendZepto);
   server.onNotFound(handleNotFound);
   server.begin();
   Serial.println("Server started");
