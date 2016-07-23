@@ -27,8 +27,6 @@ char index_html[] = R"---(
 
       </style>
 
-
-
     </head>
 
     <body>

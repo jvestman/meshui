@@ -9,11 +9,19 @@
 
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 #include "index.html.h"
 #include "index.css.h"
 
+
 const char* ssid = "meshui12345";
 const char* password = "meshui12345";
+
+#define ONE_WIRE_BUS 2  // DS18B20 pin
+OneWire oneWire(ONE_WIRE_BUS);
+DallasTemperature DS18B20(&oneWire);
+
 
 // Create an instance of the server
 // specify the port to listen on as an argument
@@ -32,6 +40,12 @@ void handleNotFound(){
   server.send(404, "text/plain", "");
 }
 
+void handleGetTemp(){
+  DS18B20.requestTemperatures();
+  float temp = DS18B20.getTempCByIndex(0);
+  server.send(200, "application/json", String(temp, 1));
+}
+
 void setup() {
   Serial.begin(115200);
   delay(10);
@@ -43,6 +57,7 @@ void setup() {
   server.on("/", handleRoot);
   server.on("/index.css", sendCss);
   server.on("index.css", sendCss);
+  server.on("/temp", handleGetTemp);
   server.onNotFound(handleNotFound);
   server.begin();
   Serial.println("Server started");
