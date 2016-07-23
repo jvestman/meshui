@@ -9,6 +9,8 @@
 
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
+#include "index.html.h"
+#include "index.css.h"
 
 const char* ssid = "meshui12345";
 const char* password = "meshui12345";
@@ -19,7 +21,11 @@ const char* password = "meshui12345";
 ESP8266WebServer server(80);
 
 void handleRoot() {
-  server.send(200, "text/plain", "hello from esp8266!");
+  server.send(200, "text/html", index_html);
+}
+
+void handleNotFound(){
+  server.send(404, "text/plain", "");
 }
 
 void setup() {
@@ -31,6 +37,7 @@ void setup() {
   WiFi.softAP(ssid, password);
 
   server.on("/", handleRoot);
+  server.onNotFound(handleNotFound);
   server.begin();
   Serial.println("Server started");
 
