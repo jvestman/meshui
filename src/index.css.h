@@ -1,4 +1,4 @@
-char index_css[] = R"foo(
+char index_css[] = R"---(
 /*!
  * Bootstrap v3.3.6 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
@@ -1140,4 +1140,4 @@ a.badge:hover,a.badge:focus {
   clear: both;
 }
 
-/*# sourceMappingURL=bootstrap.css.map */)foo";
+/*# sourceMappingURL=bootstrap.css.map */)---";
