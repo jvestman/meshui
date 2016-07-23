@@ -25,7 +25,7 @@ void handleRoot() {
 }
 
 void sendCss() {
-  server.send(200, "text/css", "body { font-family: sans-serif;}");
+  server.send(200, "text/css", index_css);
 }
 
 void handleNotFound(){
