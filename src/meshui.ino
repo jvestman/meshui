@@ -49,6 +49,7 @@ void setup() {
 
   // Print the IP address
   Serial.println(WiFi.localIP());
+  Serial.println(index_css);
 
 }
 
