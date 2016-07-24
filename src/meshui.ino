@@ -11,6 +11,7 @@
 #include <ESP8266WebServer.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
+#include <fs.h>
 #include "index.html.h"
 #include "index.css.h"
 
@@ -37,7 +38,11 @@ void sendCss() {
 }
 
 void sendZepto() {
-  server.send(200, "application/javascript", "");
+  File f = SPIFFS.open("/zepto.js", "r");
+  if (!f) {
+      Serial.println("file open failed");
+  }
+  server.streamFile( f,"application/javascript");
 }
 
 void handleNotFound(){
@@ -51,6 +56,7 @@ void handleGetTemp(){
 }
 
 void setup() {
+  SPIFFS.begin();
   Serial.begin(115200);
   delay(10);
 
