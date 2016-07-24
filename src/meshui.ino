@@ -50,7 +50,6 @@ void setup() {
   Serial.begin(115200);
   delay(10);
 
-
   WiFi.mode(WIFI_AP);
   WiFi.softAP(ssid, password);
 
