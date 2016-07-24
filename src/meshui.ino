@@ -54,8 +54,8 @@ void setup() {
   WiFi.mode(WIFI_AP);
   WiFi.softAP(ssid, password);
 
-  server.on("/", [] () { sendFile("/index.hml", "text/html");} );
-  server.on("/index.html", [] () { sendFile("/index.hml", "text/html");} );
+  server.on("/", [] () { sendFile("/index.html", "text/html");} );
+  server.on("/index.html", [] () { sendFile("/index.html", "text/html");} );
   server.on("/temp", handleGetTemp);
   server.on("/index.css", [] () { sendFile("/index.css", "text/css");} );
   server.on("/zepto.js", [] () { sendFile("/zepto.js", "application/javascript");} );
