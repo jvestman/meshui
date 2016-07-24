@@ -11,7 +11,7 @@
 #include <ESP8266WebServer.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
-#include <fs.h>
+#include <FS.h>
 #include "index.html.h"
 #include "index.css.h"
 
