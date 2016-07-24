@@ -26,32 +26,11 @@ DallasTemperature DS18B20(&oneWire);
 
 ESP8266WebServer server(80);
 
-void handleRoot() {
-  //server.send(200, "text/html", index_html);
-}
-
-void sendCss() {
-  //server.send(200, "text/css", index_css);
-}
-
-void sendZepto() {
-  File f = SPIFFS.open("/zepto.js", "r");
-  if (!f) {
-      Serial.println("file open failed");
-  }
-  server.streamFile( f,"application/javascript");
-}
-
 void sendFile(const char filename[], const char contenttype[]){
   File f = SPIFFS.open(filename, "r");
   if (!f) {
       Serial.println("file open failed");
   }
-  Serial.print("Sending file ");
-  Serial.print(filename);
-  Serial.print(" ");
-  Serial.println(contenttype);
-  server.streamFile( f, contenttype);
 }
 
 void handleNotFound(){
@@ -73,11 +52,8 @@ void setup() {
   WiFi.mode(WIFI_AP);
   WiFi.softAP(ssid, password);
 
-  //server.on("/", handleRoot);
-  //server.on("/index.css", sendCss);
-  //server.on("index.css", sendCss);
-  server.on("/", [] () { sendFile("/index.hml", "text/html");} );
-  server.on("/index.html", [] () { sendFile("/index.hml", "text/html");} );
+  server.on("/", [] () { sendFile("/my.hml", "text/html");} );
+  server.on("/index.html", [] () { sendFile("/my.hml", "text/html");} );
   server.on("/temp", handleGetTemp);
   server.on("/index.css", [] () { sendFile("/index.css", "text/css");} );
   server.on("/zepto.js", [] () { sendFile("/zepto.js", "application/javascript");} );
