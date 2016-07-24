@@ -42,12 +42,12 @@ void sendZepto() {
   server.streamFile( f,"application/javascript");
 }
 
-void sendFile(const char filename[]){
+void sendFile(const char filename[], const char contenttype[]){
   File f = SPIFFS.open(filename, "r");
   if (!f) {
       Serial.println("file open failed");
   }
-  server.streamFile( f,"application/javascript");
+  server.streamFile( f, contenttype);
 }
 
 void handleNotFound(){
@@ -72,12 +72,12 @@ void setup() {
   //server.on("/", handleRoot);
   //server.on("/index.css", sendCss);
   //server.on("index.css", sendCss);
-  //server.on("/temp", handleGetTemp);
+  server.on("/temp", handleGetTemp);
   //server.on("/zepto.js", sendZepto);
-  server.on("/", [] () { sendFile("/index.hml");} );
-  server.on("/index.css", [] () { sendFile("/index.css");} );
+  server.on("/", [] () { sendFile("/index.hml", "text/html");} );
+  server.on("/index.css", [] () { sendFile("/index.css", "text/css");} );
   //server.on("/temp", [] () { sendFile("/index.hml")} );
-  server.on("/zepto.js", [] () { sendFile("/zepto.js");} );
+  server.on("/zepto.js", [] () { sendFile("/zepto.js", "application/javascript");} );
 
   server.onNotFound(handleNotFound);
   server.begin();
