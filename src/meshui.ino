@@ -77,10 +77,9 @@ void setup() {
   //server.on("/index.css", sendCss);
   //server.on("index.css", sendCss);
   server.on("/", [] () { sendFile("/index.hml", "text/html");} );
+  server.on("/index.html", [] () { sendFile("/index.hml", "text/html");} );
   server.on("/temp", handleGetTemp);
-  //server.on("/zepto.js", sendZepto);
   server.on("/index.css", [] () { sendFile("/index.css", "text/css");} );
-  //server.on("/temp", [] () { sendFile("/index.hml")} );
   server.on("/zepto.js", [] () { sendFile("/zepto.js", "application/javascript");} );
 
   server.onNotFound(handleNotFound);
