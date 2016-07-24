@@ -47,6 +47,10 @@ void sendFile(const char filename[], const char contenttype[]){
   if (!f) {
       Serial.println("file open failed");
   }
+  Serial.print("Sending file ");
+  Serial.print(filename);
+  Serial.print(" ");
+  Serial.println(contenttype);
   server.streamFile( f, contenttype);
 }
 
