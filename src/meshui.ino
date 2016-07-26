@@ -61,9 +61,9 @@ void handleWlans(){
 }
 
 void joinWlan(){
-  String ssid = arg.get("ssid");
-  String password = arg.get("password");
-  WiFi.begin(ssid, password);
+  String ssid = server.arg("ssid");
+  String password = server.arg("password");
+  WiFi.begin(ssid.c_str(), password.c_str());
 }
 
 void setup() {
