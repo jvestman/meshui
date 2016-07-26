@@ -61,15 +61,15 @@
           </div>
 
           <div class="jumbotron">
-            <form>
+            <form action="/wlan" method="post"</ac>>
               <div class="form-group">
                 <label for="exampleInputEmail1">WLAN network name (SSID)</label>
-                <select class="form-control" id="wlans">
+                <select class="form-control" id="ssid">
                 </select>
               </div>
               <div class="form-group">
                 <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                <input type="password" class="form-control" id="password" placeholder="Password">
               </div>
 
               <button type="submit" class="btn btn-default">Connect</button>
@@ -96,7 +96,7 @@
           for(s of data){
             options += "<option>" + s + "</option>";
           }
-          $("#wlans").html(options);
+          $("#ssid").html(options);
         }
       });
     });

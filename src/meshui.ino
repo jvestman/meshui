@@ -60,6 +60,12 @@ void handleWlans(){
   server.send(200, "application/json", s);
 }
 
+void joinWlan(){
+  String ssid = arg.get("ssid");
+  String password = arg.get("password");
+  WiFi.begin(ssid, password);
+}
+
 void setup() {
   SPIFFS.begin();
   Serial.begin(115200);
@@ -73,7 +79,8 @@ void setup() {
   server.on("/temp", handleGetTemp);
   server.on("/index.css", [] () { sendFile("/index.css", "text/css");} );
   server.on("/zepto.js", [] () { sendFile("/zepto.js", "application/javascript");} );
-  server.on("/wlans", handleWlans);
+  server.on("/wlan", HTTP_GET, handleWlans);
+  server.on("/wlan", HTTP_POST, joinWlan);
 
   server.onNotFound(handleNotFound);
   server.begin();
