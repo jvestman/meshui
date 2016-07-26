@@ -45,6 +45,16 @@ void handleGetTemp(){
   server.send(200, "application/json", String(temp, 1));
 }
 
+void handleWlans(){
+  String s = "[";
+  int n = WiFi.scanNetworks();
+  for(int i = 0; i < n; i++){
+    s += WiFi.SSID(i);
+  }
+  s += "]";
+  server.send(200, "application/json", s);
+}
+
 void setup() {
   SPIFFS.begin();
   Serial.begin(115200);
@@ -58,6 +68,7 @@ void setup() {
   server.on("/temp", handleGetTemp);
   server.on("/index.css", [] () { sendFile("/index.css", "text/css");} );
   server.on("/zepto.js", [] () { sendFile("/zepto.js", "application/javascript");} );
+  server.on("/wlans", handleWlans);
 
   server.onNotFound(handleNotFound);
   server.begin();
