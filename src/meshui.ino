@@ -49,7 +49,12 @@ void handleWlans(){
   String s = "[";
   int n = WiFi.scanNetworks();
   for(int i = 0; i < n; i++){
+    s += '\"';
     s += WiFi.SSID(i);
+    s += '\"';
+    if(i<n){
+      s += ", ";
+    }
   }
   s += "]";
   server.send(200, "application/json", s);
