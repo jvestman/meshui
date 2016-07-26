@@ -52,7 +52,7 @@ void handleWlans(){
     s += '\"';
     s += WiFi.SSID(i);
     s += '\"';
-    if(i<n){
+    if(i+1<n){
       s += ", ";
     }
   }
